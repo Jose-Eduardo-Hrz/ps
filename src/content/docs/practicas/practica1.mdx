@@ -34,24 +34,38 @@ El mensaje Hueso 1 o Hueso 2 dependiendo de qué hueso es el que es simultáneam
 
 ```c 
 #include<stdio.h>
-int main(){
-    // Declaracion de Variables
-    int olor_hueso1;
-    int tam_hueso1;
-    int olor_hueso2;
-    int tam_hueso2;
-    // Entrada de Datos
+
+int main() {
+
+    int olor_hueso1 , tam_hueso1;
     scanf( "%d %d" , &olor_hueso1 , &tam_hueso1 );
+
+    int olor_hueso2 , tam_hueso2;
     scanf( "%d %d" , &olor_hueso2 , &tam_hueso2 );
-    // Decisiones
-    if( olor_hueso1 > olor_hueso2 && tam_hueso1 > tam_hueso2 ){
-        printf( "Hueso 1" );
-    }else {
-        if( olor_hueso2 > olor_hueso1 && tam_hueso2 > tam_hueso1 ){
-            printf( "Hueso 2" );
-        }else {
-            printf( "Perrito Confundido :(" );
-        }
+
+    int marcadorHueso1 = 0;
+    int marcadorHueso2 = 0;
+
+    if( olor_hueso1 > olor_hueso2 ){
+        marcadorHueso1++;
+    }else if( olor_hueso2 > olor_hueso1 ){
+        marcadorHueso2++;
     }
+
+    if( tam_hueso1 > tam_hueso2 ){
+        marcadorHueso1++;
+    }else if( tam_hueso2 > tam_hueso1 ){
+        marcadorHueso2++;
+    }
+
+    if( marcadorHueso1 > marcadorHueso2 ){
+        printf( "Hueso 1" );
+    } else if( marcadorHueso1 < marcadorHueso2 ){
+        printf( "Hueso 2" );
+    } else {
+        printf( "Perrito confundido :(" );
+    }
+
+    return 0;
 }
 ```
