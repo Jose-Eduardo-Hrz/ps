@@ -1,0 +1,78 @@
+---
+title : Práctica 3. Triangulos
+---
+
+## Problema 
+
+### Descripción 
+
+Construir un programa que reciba tres valores enteros correspondientes a los lados de un triángulo. El programa deberá indicar si con esos tres lados se forma un triángulo. Si se forma un triángulo, entonces deberá indicar de qué tipo es: equilátero, isósceles o escaleno; además deberá proporcionar el área del mismo triángulo.
+
+Actividades:
+
+- Analizar las funciones que formarán parte de la solución: Proponer una tabla con Tarea y Nombre de función, y otra tabla con Nombre de función, Parámetros que recibe y Parámetro que devuelve.
+- Analizar cada una de las funciones; incluir para cada una de ellas dos ejemplos
+- Diseñar un Diagrama de flujo para cada función
+- Codificar en lenguaje C el algoritmo propuesto con funciones
+
+## Diagrama de Flujo
+
+![Practica 3 Diagrama de Flujo Principal](/ps/practicas/practica3/diagrama1.png)
+
+## Código
+
+```c 
+#include<stdio.h>
+#include<math.h>
+
+float triangulo_equilatero( int lado ){
+    printf( "El triangulo es equilatero\n" );
+    float area = ( sqrt( 3 ) / 4 ) * pow( lado , 2 );
+    return area;
+}
+
+float triangulo_isosceles( int ladoDiferente , int ladoIgual ){
+    printf( "El triangulo es isisceles\n" );
+    float altura = sqrt( pow( ladoIgual , 2 ) - (pow( ladoDiferente , 2 ) / 4) );
+    float area = ( ladoDiferente * altura ) / 2;
+    return area;
+}
+
+float triangulo_escaleno( int ladoA , int ladoB , int ladoC ){
+    printf( "El triangulo es escaleno\n" );
+    float s = (float) ( ladoA + ladoB + ladoC ) / 2;
+    float area = sqrt( s * ( s - ladoA ) * ( s - ladoB ) * ( s - ladoC ) );
+    return area;
+}
+
+
+int main(){
+
+    int ladoA , ladoB , ladoC;
+    scanf( "%d %d %d" , &ladoA , &ladoB , &ladoC );
+
+    if( ladoA > 0 && ladoB > 0 && ladoC > 0 ){
+
+        float resultado = 0;
+
+        if( ladoA == ladoB && ladoA == ladoC && ladoB == ladoC ){
+            resultado = triangulo_equilatero( ladoA );
+        }else if( ladoA == ladoB || ladoB == ladoC || ladoC == ladoA ){
+            if( ladoA == ladoB ){
+                resultado = triangulo_isosceles( ladoC , ladoA );
+            } else if( ladoB == ladoC ){
+                resultado = triangulo_isosceles( ladoA , ladoB );
+            } else if( ladoC == ladoA ){
+                resultado = triangulo_isosceles( ladoB , ladoA );
+            }
+        } else {
+            resultado = triangulo_escaleno( ladoA , ladoB , ladoC );
+        }
+
+        printf( "El area del triangulo es: %.2f" , resultado );
+
+    }
+
+    return 0;
+}
+```
