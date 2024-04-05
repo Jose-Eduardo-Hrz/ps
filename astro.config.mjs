@@ -9,7 +9,10 @@ export default defineConfig({
 			title: 'PS',
 			tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 5 },
 			sidebar: [
-				{ label: 'Practicas', link: 'practicas/practica1' },
+				{
+					label: 'Practicas',
+					autogenerate: { directory: 'practicas' },
+				},
 			],
 		}),
 	],
