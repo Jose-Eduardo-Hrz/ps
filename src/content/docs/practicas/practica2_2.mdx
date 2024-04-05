@@ -1,0 +1,96 @@
+---
+title : Práctica 2.2 Clasificando Animales
+---
+
+## Problema 
+
+### Descripción 
+
+Dada las siguientes condiciones:
+
+![Practica 2.2 Condiciones](/ps/practicas/practica2_2/condiciones.png)
+
+Crear un programa que permita indicar de qué tipo es el animal.
+
+### Entrada de Datos
+
+Todos los valores serán de tipo booleano (0 o 1)
+
+### Salida de Datos
+
+Una cadena de caracteres indicando el tipo de animal
+
+### Ejemplo 
+
+| Entrada | Salida |
+|------|:-------|
+1 0 | aracnido
+0 0 1 1 | ave
+1 1 | Insecto
+0 0 0 | cetaceo
+
+## Diagrama de Flujo
+
+![Practica 2.2 Diagrama de Flujo](/ps/practicas/practica2_2/diagrama.png)
+
+## Código
+
+```c 
+#include<stdio.h>
+
+int main() {
+
+    int numeroOjos;
+    printf( "Numero de ojos mayor a 3? [0:no][1:si]" );
+    scanf( "%d" , &numeroOjos );
+
+    if( numeroOjos ){
+
+        int numeroPatas;
+        printf( "El numero de patas es menor a 8? [0:no][1:si]" );
+        scanf( "%d" , &numeroPatas );
+
+        if( numeroPatas ){
+            printf( "insecto" );
+        }else {
+            printf( "aracnido" );
+        }
+
+
+    }else {
+        int tienePelo;
+        printf( "Tiene pelo?: [0:no][1:si]" );
+        scanf( "%d" , &tienePelo );
+
+        if( tienePelo ){
+            printf( "mamifero" );
+        }else {
+
+            int esOviparo;
+            printf( "Es oviparo? [0:no][1:si]" );
+            scanf( "%d" , &esOviparo );
+
+            if( esOviparo ){
+
+                int tienePlumas;
+                printf( "Tiene Plumas?: [0:no][1:si]" );
+                scanf( "%d" , &tienePlumas );
+
+                if( tienePlumas ){
+                    printf( "ave" );
+                }else {
+                    printf( "reptil" );
+                }
+
+            }else {
+                printf( "cataceo" );
+            }
+
+        }
+
+    }
+
+    return 0;
+}
+
+```
