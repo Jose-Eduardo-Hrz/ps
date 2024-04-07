@@ -51,7 +51,10 @@ int main(){
     int ladoA , ladoB , ladoC;
     scanf( "%d %d %d" , &ladoA , &ladoB , &ladoC );
 
-    if( ladoA > 0 && ladoB > 0 && ladoC > 0 ){
+    if( ladoA > 0 && ladoB > 0 && ladoC > 0 &&
+       (ladoA + ladoB) > ladoC &&
+       (ladoA + ladoC) > ladoB &&
+       (ladoB + ladoC) > ladoA ){
 
         float resultado = 0;
 
@@ -71,6 +74,8 @@ int main(){
 
         printf( "El area del triangulo es: %.2f" , resultado );
 
+    }else {
+        printf( "No es posible crear un triangulo con esas medidas" );
     }
 
     return 0;
