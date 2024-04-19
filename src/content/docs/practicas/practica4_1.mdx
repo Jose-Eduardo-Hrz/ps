@@ -1,0 +1,62 @@
+---
+title : Práctica 4. Calculando la mesada
+---
+
+## Problema 
+
+### Descripción 
+
+Ayuda a pepito a calcular su mesada, para esto, sus padres le indican que por cada actividad que realice, el podrá ganar lo siguiente:
+1. Tender la cama 20 pesos
+2. Lavar trastes 15 pesos
+3. Lavar baño 30 pesos
+4. Sacar basura 5 pesos
+5. Lavar ropa 10 pesos
+6. Planchar ropa 22 pesos
+
+:::note[Nota]
+Si dentro de los deberes, lavar el baño y planchar la ropa son el 40% de sus actividades, Pepito tendrá un 20% extra en su mesada.
+:::
+
+### Entrada de Datos
+
+Seis números enteros indicando las veces que tendió la cama, lavo trastes, lavo el baño, saco la basura, lavó ropa y plancho ropa respectivamente.
+
+### Salida de Datos
+
+Un número flotante indicando el total de su mesada.
+
+### Ejemplo 
+
+| Entrada | Salida |
+|------|:-------|
+2  3  2  2  4  3 | 261.00
+3  1  5  2  4  7 | 514.80
+
+## Diagrama de Flujo
+
+![Practica 1.1 Diagrama de Flujo](/ps/practicas/practica4_1/diagrama.png)
+
+## Código
+
+```c 
+#include<stdio.h>
+int main() {
+    int cama ,trastes , bano , basura , ropa , planchar;
+    scanf( 
+        "%d %d %d %d %d %d" , 
+        &cama , &trastes , &bano , &basura , &ropa , &planchar 
+    );
+    float total = (cama * 20) + 
+                (trastes * 15) + 
+                (bano * 30) + 
+                (basura * 5) + 
+                (ropa * 10) + (planchar * 22);
+    float porcentajeActividades = (float) ( bano + planchar ) / 
+                ( cama + trastes + bano + basura + ropa + planchar );
+    if( porcentajeActividades > 0.4 ){
+        total = total * 1.2;
+    }
+    printf( "Mesada total: %.2f" , total );
+}
+```
