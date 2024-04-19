@@ -1,0 +1,71 @@
+---
+title : Práctica 4.2  Calculadora básica
+---
+
+## Problema 
+
+### Descripción 
+
+Crea un programa que permita al usuario seleccionar qué operación desea realizar. Ingresar dos números (mayores que cero) y hacer el cálculo. La calculadora deberá tener un menú de opciones entre suma, resta, multiplicación o división, y dependiendo la selección del usuario, será la operación a realizar y mostrando el resultado en pantalla.
+
+### Entrada de Datos
+
+Tres enteros indicando la opcion ( 1 si es suma, 2 si es resta, 3 si es multiplicación o 4 si es divicion ), asi como el primer y segundo valor de la operación matematica. 
+
+### Salida de Datos 
+
+El resultado de la operacion matematica. 
+
+### Ejemplo 
+
+| Entrada | Salida |
+|------|:-------|
+1 10 10 | El resultado de la suma es: 20
+2 15 5 | El resultado de la resta es: 10
+3 3 15 | El resultado de la multiplicacion es: 45
+4 100 2 | El resultado de la divicion es: 50
+
+
+## Código
+
+```c 
+#include<stdio.h>
+int main(){
+    int opcion = 0;
+    printf( "Menu:\n" );
+    printf( "1. Suma\n" );
+    printf( "2. Resta\n" );
+    printf( "3. Multiplicacion\n" );
+    printf( "4. Division\n" );
+    printf( "Seleccione una opcion: " );
+    scanf( "%d" , &opcion );
+    float resultado = 0;
+    int valor1 , valor2;
+    switch ( opcion ){
+        case 1:
+            scanf( "%d %d" , &valor1 , &valor2 );
+            resultado = valor1 + valor2;
+            printf("El resultado de la suma es: %.2f" , resultado );
+            break;
+        case 2:
+            scanf( "%d %d" , &valor1 , &valor2 );
+            resultado = valor1 - valor2;
+            printf("El resultado de la resta es: %.2f" , resultado );
+            break;
+        case 3:
+            scanf( "%d %d" , &valor1 , &valor2 );
+            resultado = valor1 * valor2;
+            printf("El resultado de la multiplicacion es: %.2f" , resultado );
+            break;
+        case 4:
+            scanf( "%d %d" , &valor1 , &valor2 );
+            resultado = valor1 / valor2;
+            printf("El resultado de la divicion es: %.2f" , resultado );
+            break;
+        default:
+            printf( "Opcion no valida !!!" );
+            break;
+    }
+    return 0;
+}
+```
