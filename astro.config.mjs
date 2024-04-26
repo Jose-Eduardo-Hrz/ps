@@ -3,7 +3,6 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	base: '/ps',
 	integrations: [
 		starlight({
 			title: 'PS',
