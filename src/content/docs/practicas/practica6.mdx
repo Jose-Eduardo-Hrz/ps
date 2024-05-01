@@ -1,0 +1,151 @@
+---
+title : Practica 6. Arreglos unidimensionales con funciones
+---
+
+## Problema 1
+
+### Descripción 
+
+Dado un arreglo de tamaño máximo 500 elementos, cuyos valores sean generados de manera aleatoria en un rango [1..1000], construya un programa que obtenga un nuevo arreglo con los valores que son pares y otro arreglo con los valores que son impares.
+
+### Ejemplo 
+
+| Entrada | Salida |
+|------|:-------|
+<br/>  | Numeros Pares: <br/> 450 404 604 814 476 72 838 672 348 316 288 194 854 702 726 214 96 868 616 426 788 786 180 430 768 252 690 430 830 816 660 418 182 238 954 870 762 474 622 770 616 556 862 258 470 530 418 40 900 236 718 772 672 86 746 936 220 576 744 532 110 706 908 60 910 538 916 36 636 114 230 264 562 492 386 50 610 220 910 496 336 768 584 646 862 138 912 800 226 860 274 406 996 694 432 934 818 842 418 684 280 758 426 952 208 682 256 388 176 960 378 32 498 854 556 764 138 156 168 342 224 514 134 202 498 294 54 550 230 532 932 402 256 176 580 748 122 194 670 106 684 746 904 216 460 722 894 810 818 588 274 658 192 230 596 570 552 24 708 18 180 60 764 954 690 904 180 282 156 326 450 498 4 624 792 710 476 418 646 138 58 364 318 396 930 702 738 866 840 880 104 534 162 774 132 830 440 602 612 716 228 78 202 346 596 398 234 592 420 962 318 790 76 370 186 714 886 806 486 120 730 836 318 314 142 404 450 948 974 606 544 586 572 466 736 882 300 812 322 760 424 664 210 460 472 132 488 136 844 <br/> Numeros Impares:<br/> 491 245 55 969 753 199 145 857 157 725 139 677 307 163 991 515 851 347 85 817 357 393 177 983 641 365 355 159 147 405 933 349 759 443 843 291 559 189 413 759 469 175 533 541 299 475 931 275 867 563 737 255 313 265 447 269 339 985 101 831 773 95 81 25 163 47 781 985 275 33 165 87 527 43 397 507 595 469 503 753 147 693 195 155 27 837 485 295 277 519 243 837 599 273 879 201 113 321 935 491 885 831 39 521 881 571 197 125 635 103 947 917 601 27 381 683 783 649 153 549 139 975 617 395 449 901 213 435 999 653 81 7 117 707 121 737 743 987 69 567 837 755 33 985 357 715 491 349 203 323 181 345 259 273 787 871 175 947 475 355 47 431 69 703 609 293 351 349 809 909 733 265 779 525 683 417 645 635 595 783 69 317 99 997 827 821 255 845 599 131 365 103 133 291 261 191 207 79 527 451 579 989 883 221 623 901 613 583 881 439 259 381 983 551 717 851 827 561 447 895 87 579 977 297 731 489 361 857 533 975 513 355 307 837 929 757 947 701 383 355 151 939 375 437 101 739 393 349 961 611 331
+
+:::note[Nota]
+La salida puede variar, ya que se utilizan números aleatorio
+:::
+
+### Código
+
+```c
+#include<stdio.h>
+#include <stdlib.h>
+#include<stdio.h>
+
+void obtenerArregloNumerosPares( 
+    int arregloNumeros[] , int arregloNumerosPares[] 
+){
+    int tamNumerosPares = 0;
+    for( int i = 0 ; i < 500 ; i++ ){
+        if( arregloNumeros[i] % 2 == 0 ){
+            arregloNumerosPares[tamNumerosPares++] = arregloNumeros[i];
+        }
+    }
+}
+
+int obtenerArregloNumerosImpares( 
+    int arregloNumeros[] , int arregloNumerosImpares[] 
+){
+    int tamNumerosImpares = 0;
+    for( int i = 0 ; i < 500 ; i++ ){
+        if( arregloNumeros[i] % 2 != 0 ){
+            arregloNumerosImpares[tamNumerosImpares++] = arregloNumeros[i];
+        }
+    }
+}
+
+void generarArreglo( int arregloNumeros[] ){
+    srand(time(NULL));
+    for( int i = 0 ; i < 500 ; i++ ){
+        arregloNumeros[i] = rand() % 1000 + 1;
+    }
+    return arregloNumeros;
+}
+
+void imprimirArreglo( int arreglo[] ){
+    for( int i = 0 ; arreglo[i] != 0 ; i++ ){
+        printf("%d " , arreglo[i]);
+    }
+}
+
+int main() {
+
+    int arregloNumeros [500];
+    generarArreglo( arregloNumeros );
+
+    int arregloNumerosPares[500] = { 0 };
+    obtenerArregloNumerosPares( 
+        arregloNumeros , arregloNumerosPares 
+    );
+
+    int arregloNumerosImpares[500] = { 0 };
+    obtenerArregloNumerosImpares( 
+        arregloNumeros , arregloNumerosImpares 
+    );
+
+    printf("Numeros Pares:\n");
+    imprimirArreglo( arregloNumerosPares );
+
+    printf("\nNumeros Impares:\n");
+    imprimirArreglo( arregloNumerosImpares );
+
+}
+```
+
+## Problema 2
+
+### Descripción 
+
+Generar un arreglo A de máximo 1000 elementos. El usuario determinará el tamaño del arreglo. Los valores del arreglo deberán generarse de manera aleatoria, en un rango [0..9].  El programa deberá obtener como salida un nuevo arreglo B que contenga la frecuencia de aparición de los  valores [0..9] en el arreglo A.
+
+### Ejemplo 
+
+| Entrada | Salida |
+|------|:-------|
+<br/>  | 15 <br/>Numeros Generados aleatoriamente [0-9]: <br/>2 3 1 9 8 3 4 1 9 9 3 2 6 4 7<br/><br/>Frecuencia de aparicion<br/>[0] = 0<br/>[1] = 2<br/>[2] = 2<br/>[3] = 3<br/>[4] = 2<br/>[5] = 0<br/>[6] = 1<br/>[7] = 1<br/>[8] = 1<br/>[9] = 3
+
+### Código
+
+```c 
+#include<stdio.h>
+#include <stdlib.h>
+#include<stdio.h>
+
+void generarArregloAleatoriamente( 
+    int arregloAleatorio[] , int tam 
+){
+    printf( "\nNumeros Generados aleatoriamente [0-9]:\n" );
+    for( int i = 0 ; i < tam ; i++ ){
+        arregloAleatorio[i] = rand() % 10;
+        printf( "%d " , arregloAleatorio[i] );
+    }
+}
+
+void crearArregloConValorInicalCero( int frecuencia[] ){
+    for( int i = 0 ; i < 10 ; i++ ){
+        frecuencia[i] = 0;
+    }
+}
+
+void obtenerFrecuencia( 
+    int arregloAleatorio[] , int tam , int frecuencia[] 
+){
+    for( int i = 0 ; i < tam ; i++ ){
+        frecuencia[ arregloAleatorio[i] ] += 1;
+    }
+}
+
+void imprimirFrecuencia( int frecuencia[] ){
+    printf( "\n\nFrecuencia de aparicion\n" );
+    for( int i = 0 ; i < 10 ; i++ ){
+        printf( "[%d] = %d\n" , i , frecuencia[i] );
+    }
+}
+
+int main() {
+    srand(time(NULL));
+    int tam;
+    scanf( "%d" , &tam );
+    if( tam > 1000 ) return 0;
+    int arregloAleatorio[tam];
+    generarArregloAleatoriamente( arregloAleatorio , tam );
+    int frecuencia[10];
+    crearArregloConValorInicalCero( frecuencia );
+    obtenerFrecuencia( arregloAleatorio , tam , frecuencia );
+    imprimirFrecuencia( frecuencia );
+}
+
+```
