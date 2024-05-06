@@ -1,0 +1,113 @@
+---
+title : Funciones Utiles
+---
+
+
+## Clonar una cadenas de caracteres
+
+### Declaración
+```c 
+//  Biblioteca String.h
+char * strdup( const char * string ) 
+```
+
+### Ejemplo
+```c 
+// archivo.c
+#include <stdio.h>
+#include<string.h>
+
+int main() {
+    char cadena [] = "Hola como estas!!!";
+    char * p = strdup( cadena );
+    printf( "%s" , p );
+    return 0;
+}
+```
+
+```sh
+"Hola como estas!!!"
+```
+
+## Obtener un puntero en la primera aparcion del caracter
+
+### Declaración
+
+```c 
+// Biblioteca string.h
+char * strchr( const char * string , char caracter ) 
+```
+
+### Ejemplo
+```c 
+// archivo.c
+#include <stdio.h>
+#include<string.h>
+
+int main() {
+    char cadena [] = "Hola como estas!!!";
+    char * p = strchr( cadena , 'm' );
+    printf( "%s" , p );
+    return 0;
+}
+```
+
+```sh 
+"mo estas!!!"
+```
+
+## Obtener un puntero en la ultima aparcion del caracter
+
+### Declaración
+
+```c 
+// Biblioteca string.h
+char * strrchr( const char * string , char caracter ) 
+```
+
+### Ejemplo
+```c 
+// archivo.c
+#include <stdio.h>
+#include<string.h>
+
+int main() {
+    char cadena [] = "Hola como estas!!!";
+    char * p = strrchr( cadena , 'o' );
+    printf( "%s" , p );
+    return 0;
+}
+```
+
+```sh 
+"o estas!!!"
+```
+
+## Copiar N caracter de una cadena
+
+### Declaración
+
+```c 
+// Biblioteca string.h
+char * strncpy( const char * destino , const char * origen , size_t n ) 
+```
+
+### Ejemplo
+```c 
+// archivo.c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char origen [] = "Hola como estas!!!";
+    char destino [30];
+    strncpy( destino , origen , 4 );
+    printf( "%s" , destino );
+    return 0;
+}
+```
+
+```sh 
+"Hola"
+```
+

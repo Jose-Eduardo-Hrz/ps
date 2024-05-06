@@ -13,6 +13,10 @@ export default defineConfig({
 					label: 'Practicas',
 					autogenerate: { directory: 'practicas' },
 				},
+				{
+					label: 'Proyecto',
+					autogenerate: { directory: 'proyecto' },
+				},
 			],
 		}),
 	],
