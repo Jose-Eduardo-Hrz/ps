@@ -1,0 +1,160 @@
+---
+title : Practica 7. Práctica. While
+---
+
+## Problema 1. Los ahorros de UAMito
+
+### Descripción 
+
+UAMito desea ahorrar su dinero haciendo depósitos variables cada mes; ayuda a UAMito a determinar el total de sus ahorros. 
+El banco le proporcionará a Uamito una ganancia del 6%, del monto total ahorrado al cumplirse un año. Uamito ingresará los depósitos de cada mes. Cuando Uamito desee terminar, ingresará el valor -1.
+
+### Ejemplo 
+
+| Entrada | Salida |
+|------|:-------|
+500 <br/> 300 <br/> 400 <br/> -1 | Total de Ahorro en 2 meses: 1200.000
+50 <br/> 50 <br/> 30 <br/> 20 <br/> 100 <br/> 50 <br/> 70 <br/> 80 <br/> 60 <br/> 10 <br/> 80 <br/> 90 <br/> 80 <br/> -1 | Total de Ahorro en 12 meses: 816.200
+
+### Código
+
+```c
+#include <stdio.h>
+
+float obtenerDeposito( int meses ){
+    float deposito = 0;
+    printf( "Ingrese el ahorro del mes %d: \n" , meses );
+    scanf( "%f" , &deposito );
+    return deposito;
+}
+
+float calculoAhorro(){
+    float totalAhorro = 0;
+    int meses = 0;
+    while( 1 ){
+        float deposito = obtenerDeposito( meses );
+        if( deposito <= 0 ){
+            if( meses >0 ) meses--;
+            break;
+        }
+        totalAhorro = totalAhorro + deposito;
+        if( meses % 12 == 0 && meses != 0 ) totalAhorro = totalAhorro * 1.06;
+        meses++;
+    }
+    printf( "Total de Ahorro en %d meses: %.3f" , meses , totalAhorro );
+}
+
+int main() {
+    calculoAhorro();
+    return 0;
+}
+```
+
+## Problema 2. Lanzando una moneda
+
+### Descripción
+
+Se desea tirar 1x10^6 una moneda, para después calcular la suma y el promedio de las veces que cayó "sol" y "águila".
+
+### Ejemplo 
+
+| Entrada | Salida |
+|------|:-------|
+<br/> | Numero de veces que se lanzo la moneda 21639 <br/> Numero de veces que cayo aguila: 10725 <br/> Numero de veces que cayo sol: 10914 <br/> porcentaje de veces que cayo aguila : 49.5633 <br/> porcentaje de veces que cayo sol : 50.4367
+
+:::note[Nota]
+La salida puede variar, ya que se utilizan números aleatorio
+:::
+
+### Código
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int tirarMoneda(){
+    return rand() % 2;
+}
+
+void calcularSumaPromedio(){
+    int aguila = 0;
+    int sol = 0;
+    int veces = rand() % 1000000 + 1;
+    printf( "Numero de veces que se lanzo la moneda %d\n\n" , veces );
+    int i = 0;
+    while( i++ < veces ){
+        int resultado = tirarMoneda();
+        if( resultado ){
+            aguila++;
+        }else {
+            sol++;
+        }
+    }
+    printf( "Numero de veces que cayo aguila: %d\n" , aguila );
+    printf( "Numero de veces que cayo sol: %d\n\n" , sol );
+    printf( "porcentaje de veces que cayo aguila : %.4f\n" , (float) ( 100 * aguila ) / veces );
+    printf( "porcentaje de veces que cayo sol : %.4f\n" , (float) ( 100 * sol ) / veces );
+}
+
+int main() {
+    srand(time(NULL));
+    calcularSumaPromedio();
+}
+```
+
+## Problema 3. Juego de Adivinar
+
+### Descripción
+
+Construir un programa que simule el juego de adivinar un número comprendido entre 1 y 100. El usuario tiene 7 oportunidades para lograrlo. 
+
+El programa debe generar aleatoriamente el número y luego solicitar al usuario que lo adivine. Si el número del usuario es menor que el número aleatorio, se le indica mi número es mayor ; pero si el número del usuario es mayor que el número aleatorio, se le indica mi número es menor ; si el número del usuario es igual que el número aleatorio, se le indica Acertaste; si el usuario agota sus oportunidades simplemente termina el programa.
+
+### Ejemplo 
+
+| Entrada | Salida |
+|------|:-------|
+50 <br/> 40 <br/> 45 <br/> 47  <br/> 46 <br/> 45 <br/> 42 <br/> <br/> | mi numero es menor <br/> mi numero es mayor <br/> mi numero es menor <br/> mi numero es menor <br/> mi numero es menor <br/> mi numero es menor <br/> mi numero es menor <br/> Tus 7 oportunidades se acabaron, el numero aleatorio era : 41
+50 <br/> 60 <br/> 55 <br/> 57  <br/> 58 <br/> 59 <br/> <br/> | mi numero es mayor <br/> mi numero es menor <br/> mi numero es mayor <br/> mi numero es mayor <br/> mi numero es mayor <br/> mi numero es mayor <br/> Acertaste
+
+:::note[Nota]
+La salida puede variar, ya que se utilizan números aleatorio
+:::
+
+### Código
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int obtenerNumeroAleatorio(){
+    int numero = rand() % 100 + 1;
+    return numero;
+}
+
+void juegoAdivinar(){
+    int numeroAleatorio = obtenerNumeroAleatorio();
+    int intentos = 7;
+    while( intentos-- > 0 ){
+        int numero;
+        printf( "Ingresa un numero: \n" );
+        scanf( "%d" , &numero );
+        if( numero == numeroAleatorio ){
+            printf( "Acertaste\n" );
+            return;
+        } else if( numero < numeroAleatorio ){
+            printf( "mi numero es mayor\n\n" );
+        }else {
+            printf( "mi numero es menor\n\n" );
+        }
+    }
+    printf( "Tus 7 oportunidades se acabaron, el numero aleatorio era : %d" , numeroAleatorio );
+}
+
+int main() {
+    srand(time(NULL));
+    juegoAdivinar();
+}
+```
