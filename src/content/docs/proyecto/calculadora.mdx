@@ -1,0 +1,161 @@
+---
+title : Proyecto Final. Calculadora
+---
+
+```c 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+int es_operador( char c ){
+    return c == '+' || c == '-' || c == '*' || c == '/';
+}
+
+int prioridadOperador( char c ){
+    if( c == '*' ){
+        return 4;
+    }else if( c == '/' ){
+        return 3;
+    }else if( c == '+' ){
+        return 2;
+    }else if( c == '-' ){
+        return 1;
+    }
+    return -1;
+}
+
+int obtenerOperadorMenorPrioridad( char exp[] , int ini , int fin ){
+    int operadorMenorPrioridad = -1;
+    int parentesis = 0;
+    while( ini <= fin ){
+        if( exp[fin] == ')' ){
+            parentesis++;
+        } else if( exp[fin] == '(' ){
+            parentesis--;
+        }if( es_operador( exp[fin] ) && parentesis == 0 ){
+            if( operadorMenorPrioridad == -1 ){
+                operadorMenorPrioridad = fin;
+            }else if( prioridadOperador( exp[fin] ) <= prioridadOperador( exp[operadorMenorPrioridad] ) ){
+                operadorMenorPrioridad = fin;
+            }
+        }
+        fin--;
+    }
+    return operadorMenorPrioridad;
+}
+
+int verificarParentesis( char exp[] , int ini , int fin ){
+    int parentesis = 0;
+    for( int i = fin ; i >= ini ; i-- ){
+        if( exp[i] == ')' ){
+            parentesis++;
+        } else if( exp[i] == '(' && parentesis != 0 ){
+            parentesis--;
+        }
+    }
+    return parentesis;
+}
+
+void calcular( char n1[] , char oper , char n2[] , char registro[] ){
+    double num1 = atof(n1);
+    double num2 = atof(n2);
+    double resultado;
+    if( oper == '+' ){
+        resultado = num1 + num2;
+    } else if( oper == '-' ){
+        resultado = num1 - num2;
+    }  else if( oper == '*' ){
+        resultado = num1 * num2;
+    } else if( oper == '/' && num2 != 0 ){
+        resultado = num1 / num2;
+    } else if( oper == '/' && num2 == 0 ){
+        printf("Resultado Indefinido\n");
+        exit(EXIT_FAILURE);
+    }
+    snprintf(registro, 100, "%g", resultado);
+}
+
+void obtenerResultado( char exp[] , int tam ){
+
+    char resultados[tam][tam][100];
+
+    for( int i = 0 ; i < tam ; i++ ){
+        for( int j = 0 ; j < tam ; j++ ){
+            resultados[i][j][0] = '\0';
+        }
+    }
+
+    int tamPrioridad = 0;
+    int prioridad[tam][3];
+
+    int ini = 0;
+    int fin = tam-1;
+
+    while( strlen( resultados[0][tam-1] ) == 0 ){
+
+        if( exp[ini] == '(' && exp[fin] == ')' && verificarParentesis( exp , ini+1 , fin-1 ) == 0 ){
+            int num = strlen( resultados[ini+1][fin-1] );
+            if( num == 0 ){
+                prioridad[tamPrioridad][0] = ini;
+                prioridad[tamPrioridad][2] = fin;
+                tamPrioridad++;
+                ini = ini + 1;
+                fin = fin - 1;
+            }else {
+                strcpy( resultados[ini][fin] , resultados[ini+1][fin-1] );
+                tamPrioridad--;
+                if( tamPrioridad > 0 ){
+                    ini = prioridad[tamPrioridad-1][0];
+                    fin = prioridad[tamPrioridad-1][2];
+                }
+            }
+        }
+        else {
+            int operador =  obtenerOperadorMenorPrioridad( exp , ini , fin );
+            if( operador > -1 ){
+                int num1 = strlen( resultados[ini][operador-1] );
+                int num2 = strlen( resultados[operador+1][fin] );
+                if( num1 == 0 && num2 == 0 ){
+                    prioridad[tamPrioridad][0] = ini;
+                    prioridad[tamPrioridad][1] = operador;
+                    prioridad[tamPrioridad][2] = fin;
+                    tamPrioridad++;
+                    fin = operador-1;
+                }
+                else if( num2 == 0 ){
+                    ini = operador + 1;
+                }
+                else if( num1 > 0 && num2 > 0 ){
+                    calcular( resultados[ini][operador-1] , exp[operador] , resultados[operador+1][fin] , resultados[ini][fin] );
+                    tamPrioridad--;
+                    if( tamPrioridad > 0 ){
+                        ini = prioridad[tamPrioridad-1][0];
+                        fin = prioridad[tamPrioridad-1][2];
+                    }
+                }
+            }
+            else {
+                strncpy( resultados[ini][fin] , &exp[ini] , fin-ini+1 );
+                if( tamPrioridad > 0 ){
+                    ini = prioridad[tamPrioridad-1][0];
+                    fin = prioridad[tamPrioridad-1][2];
+                }
+            }
+        }
+
+    }
+
+    printf( "Resultado : %s" , resultados[ini][tam-1] );
+
+}
+
+int main() {
+    char exp[1000];
+    printf( "Proporcione la expresion matematica:\n" );
+    scanf( "%s" , exp );
+    obtenerResultado( exp , strlen( exp ) );
+    return 0;
+}
+
+``` 
