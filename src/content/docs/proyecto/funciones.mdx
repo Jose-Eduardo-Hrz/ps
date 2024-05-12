@@ -2,112 +2,242 @@
 title : Funciones Utiles
 ---
 
+En esta sección se encuentran las funciones utilizadas para el proyecto final `Calculadora de Números Grandes`, se agrega el nombre de la biblioteca, la declaracion y ejemplos practicos.
 
-## Clonar una cadenas de caracteres
+## Biblioteca \<string.h>
 
-### Declaración
+### Obtener el tamaño de una cadena
+
+#### Declaración
+
 ```c 
-//  Biblioteca String.h
 char * strdup( const char * string ) 
 ```
 
-### Ejemplo
+#### Ejemplo
 ```c 
 // archivo.c
-#include <stdio.h>
+#include<stdio.h>
 #include<string.h>
-
 int main() {
-    char cadena [] = "Hola como estas!!!";
-    char * p = strdup( cadena );
-    printf( "%s" , p );
+    char cadena[30];
+    scanf( "%s" , cadena );
+    int tam = strlen( cadena );
+    printf( "cadena : %s , tam : %d" , cadena , tam );
     return 0;
 }
 ```
+
+#### Resultado
 
 ```sh
-"Hola como estas!!!"
+"Holamundo"
+"cadena : Holamundo , tam : 9"
 ```
 
-## Obtener un puntero en la primera aparcion del caracter
+:::note[Nota]
+El **tamaño del arreglo** solo se utiliza para indicar cuantos caracteres puede almacenar el arreglo, cuando se agregan los caracteres desde `scanf` al final de la cadena se agrega un salto de línea `\n` indicando el final de la cadena.
+:::
 
-### Declaración
+### Copiar un arreglo de caracteres
+
+#### Declaración
 
 ```c 
-// Biblioteca string.h
-char * strchr( const char * string , char caracter ) 
+char * strcpy ( char * destination, const char * source );
 ```
 
-### Ejemplo
+#### Ejemplo
 ```c 
 // archivo.c
-#include <stdio.h>
+#include<stdio.h>
 #include<string.h>
 
 int main() {
-    char cadena [] = "Hola como estas!!!";
-    char * p = strchr( cadena , 'm' );
-    printf( "%s" , p );
+    char origen[] = "Hola mundo!!!";
+    char destino[30];
+    strcpy( destino , origen );
+    printf( "cadena copiada : %s" , destino );
     return 0;
 }
 ```
 
-```sh 
-"mo estas!!!"
+#### Resultado
+
+```sh
+"cadena copiada : Hola mundo!!!"
 ```
 
-## Obtener un puntero en la ultima aparcion del caracter
+### Copiar N caracteres de una cadena
 
-### Declaración
+#### Declaración
 
 ```c 
-// Biblioteca string.h
-char * strrchr( const char * string , char caracter ) 
+char * strncpy (char * destino, const char * fuente, size_t num);
 ```
 
-### Ejemplo
+#### Ejemplo 1
+
+En este ejemplo se copia los caracteres del <ins> **arreglo origen** </ins> al  <ins> **arreglo destino** </ins> desde la posición 0 del arreglo <ins> **arreglo origen** </ins>
+
 ```c 
 // archivo.c
-#include <stdio.h>
+#include<stdio.h>
 #include<string.h>
 
 int main() {
-    char cadena [] = "Hola como estas!!!";
-    char * p = strrchr( cadena , 'o' );
-    printf( "%s" , p );
+    char origen[] = "Hola-mundo!!!";
+    char destino[30];
+    int numeroCaracteres = 5;
+    strncpy( destino , origen , numeroCaracteres );
+    printf( "cadena con %d caracteres copiados : %s" , numeroCaracteres , destino );
     return 0;
 }
 ```
 
-```sh 
-"o estas!!!"
+#### Resultado 1
+
+```sh
+"cadena con 5 caracteres copiados : Hola-"
 ```
 
-## Copiar N caracter de una cadena
+#### Ejemplo 2
 
-### Declaración
+En este ejemplo se copia los caracteres del <ins> **arreglo origen** </ins> al  <ins> **arreglo destino** </ins> desde la posición N del arreglo <ins> **arreglo origen** </ins>
 
-```c 
-// Biblioteca string.h
-char * strncpy( const char * destino , const char * origen , size_t n ) 
-```
-
-### Ejemplo
 ```c 
 // archivo.c
-#include <stdio.h>
-#include <string.h>
+#include<stdio.h>
+#include<string.h>
 
 int main() {
-    char origen [] = "Hola como estas!!!";
-    char destino [30];
-    strncpy( destino , origen , 4 );
-    printf( "%s" , destino );
+    char origen[] = "Hola-mundo!!!";
+    char destino[30];
+    int numeroCaracteres = 5;
+    strncpy( destino , &origen[5] , numeroCaracteres );
+    printf( "cadena con %d caracteres copiados : %s" , numeroCaracteres , destino );
     return 0;
 }
 ```
 
-```sh 
-"Hola"
+#### Resultado 2
+
+```sh
+"cadena con 5 caracteres copiados : mundo"
 ```
 
+## Biblioteca \<stdlib.h>
+
+### Convertir cadena a doble
+
+#### Declaración
+
+```c 
+double atof (const char* str);
+```
+
+#### Ejemplo 1
+```c 
+// archivo.c
+#include<stdio.h>
+#include<stdlib.h>
+
+int main() {
+    char origen[] = "99999";
+    double numero = atof( origen );
+    double suma = 100 + numero;
+    printf( "numero convertido a double : %lf , suma : %lf" , numero , suma );
+    return 0;
+}
+```
+
+#### Resultado 1
+```sh
+"numero convertido a double : 99999.000000 , suma : 100099.000000"
+```
+
+#### Ejemplo 2
+```c 
+// archivo.c
+#include<stdio.h>
+#include<stdlib.h>
+
+int main() {
+    char origen[] = "1000+2000";
+    double numero1 = atof( &origen[0] );
+    double numero2 = atof( &origen[5] );
+    double suma = numero1 + numero2;
+    printf( "suma : %lf" , suma );
+    return 0;
+}
+```
+
+#### Resultado 2
+```sh
+"suma : 3000.000000"
+```
+
+### Convertir cadena a long double
+
+#### Declaración
+
+```c 
+long double strtold (const char* str, char** endptr);
+```
+
+#### Ejemplo
+```c 
+// archivo.c
+#include<stdio.h>
+#include<stdlib.h>
+
+int main() {
+    char origen[] = "9999999999999997.125";
+    char * finCadena;
+    long double numero = strtold ( origen , &finCadena );
+    printf( "%Lf" , numero );
+    return 0;
+}
+
+```
+
+#### Resultado
+```sh
+9999999999999997.125000
+```
+
+## Biblioteca \<stdio.h>
+
+### Escribir salida en cadena <br/> (para convertir de double a char[])
+
+#### Declaración
+
+```c 
+int snprintf (char * s, size_t n, const char * formato, ...);
+```
+
+#### Ejemplo
+```c 
+// archivo.c
+#include<stdio.h>
+#include<stdlib.h>
+
+int main() {
+    double numero = 12524552654;
+    char cadena[30];
+    int tamCadena = snprintf ( cadena , sizeof(cadena) , "%lf", numero );
+    printf( "cadena : %s , tam : %d" , cadena , tamCadena );
+    return 0;
+}
+```
+
+#### Resultado 1
+```sh
+"cadena : 12524552654.000000 , tam : 18"
+```
+
+## Referencias
+
+1. Biblioteca [\<string.h> ](https://cplusplus.com/reference/cstring/) consultado en [cplusplus](https://cplusplus.com/)
+2. Biblioteca [\<stdlib.h> ](https://cplusplus.com/reference/cstdlib/) consultado en [cplusplus](https://cplusplus.com/)
+3. Biblioteca [\<stdio.h> ](https://cplusplus.com/reference/cstdio/) consultado en [cplusplus](https://cplusplus.com/)

@@ -2,17 +2,209 @@
 title : Proyecto Final. Calculadora
 ---
 
+## Descripción
+
+Se desea construir una calculadora para grandes números. Un gran número es una cifra que supera el valor máximo de un tipo de dato; por ejemplo, long double 3.4E-4932 to 1.1E+4932 (requiere 10 bytes para su representación). 
+
+Al realizar las operaciones aritméticas con grandes números, no es posible emplear tipos primitivos de datos. Por lo tanto, usted deberá representar los números con cadenas para luego operar con ellas. 
+
+Entonces el programa deberá realizar las operaciones aritméticas: Suma, Resta, Multiplicación y División, con base en su prioridad y atendiendo la propiedad de asociación a través de los paréntesis. El usuario ingresará la operación aritmética compuesta de varias operaciones.
+
+## Ejemplos
+
+| Entrada | Salida |
+|---------|:-------|
+| `12445678901233567890567345+2511411144` | 1.2445679e+25 |
+| `125+858*(4589-44)/36` | 108447.5 |
+| `(985*36)*(6252-98)` | 218220840 |
+
+## Analisis del Problema
+
+### Jerarquia de Operaciones
+
+La jerarquía de operaciones es un concepto fundamental en matemáticas para resolver expresiones numéricas de manera efectiva. Comprender y aplicar la jerarquía de operaciones es muy importante para resolver operaciones matemáticas de forma correcta, evitando errores comunes y asegurando resultados precisos. Es imprescindible para entender y resolver correctamente expresiones algebraicas y ecuaciones.
+
+La jerarquía de operaciones se simplifica a menudo con la regla **PEMDAS**. Es una palabra formada a partir de las iniciales de:
+
+1. Paréntesis
+2. Exponentes (potencias)
+3. Multiplicación
+4. División
+5. Adición (sumas)
+6. Sustracción (restas)
+
+:::note[Nota]
+Para este proyecto solo se utilizan ( Paréntesis, Multiplicación, División, Sumas y Restas )
+:::
+
+Supongamos que el usuario ingresa la siguiente expresión matemática:
+
+![Imagen 1. Expresion Matematica](/ps/proyectos/calculadora/img1.png)
+
+La jerarquía de operaciones de manera gráfica seria de la siguiente manera:
+
+![Imagen 2. Representacion Grafica de Jerarquia](/ps/proyectos/calculadora/img2.png)
+
+Los resultados de cada operación de manera gráfica seria de la siguiente manera:
+
+![Imagen 3. Representacion Grafica de Resultado](/ps/proyectos/calculadora/img3.png)
+
+Sencillo ¿verdad?, observe que hay operaciones matemáticas que primero se resuelven de derecha a izquierda y después, hay otras operaciones que se resuelven de izquierda a derecha
+
+Pero, ¿Que sucede con el siguiente ejemplo?
+
+![Imagen 4. Representacion Grafica](/ps/proyectos/calculadora/img4.png)
+
+Ya no parece tan sencillo ¿verdad?.
+
+## Funciones que componen la solución
+
+### Verificar si un caracter es un operador matematico 
+
+Para verificar si el carácter que nos proporcionan es un operador matemático, es necesario comparar el carácter proporcionado con los operadores que válidos en nuestra calculadora (+,-,*,/).
+
+```c 
+int esOperador( char c ){
+    return c == '+' || c == '-' || c == '*' || c == '/';
+}
+```
+
+:::note[Nota]
+Cuando realizamos una comparación, por ejemplo `10 == 10` el resultado es un número entero, que puede ser 0 si es falso y 1 si es verdadero.
+
+El operador Or que se representa como '||', indica que, si almenos hay una cosa que es verdadero, retorna verdadero. Ejemplo:
+
+```
+10 == 10 || 50 == 50  =>  verdadero 
+    ^           ^
+verdadero     verdadero
+
+5 == 10 || 50 == 50  =>  verdadero 
+    ^           ^
+  falso     verdadero
+
+5 == 10 || 1 == 50  =>  falso 
+   ^          ^
+ falso      falso
+```
+:::
+
+### Obtener la priordad del operador
+
+Recordemos que el orden de prioridad es el siguiente (Multiplicación, División, Sumas y por último Restas), suponiendo que el carácter que proporciona el usuario no es un operador, devolvemos -1.
+
+```c
+int obtenerPrioridadOperador( char c ){
+    if( c == '*' ){
+        return 4;
+    }else if( c == '/' ){
+        return 3;
+    }else if( c == '+' ){
+        return 2;
+    }else if( c == '-' ){
+        return 1;
+    }
+    return -1;
+}
+```
+
+### Obtener la posicion del operador con menor prioridad 
+
+Para obtener la oposición del operador con menor prioridad, es necesario recorrer el arreglo indicando el inicio del primer carácter y el fin del último carácter, utilizando la función `prioridadOperador( char c )` almacenamos en la variable `operadorMenorPrioridad` la posición del operador con menor prioridad.
+
+#### Ejemplo 1
+
+En el siguiente ejemplo, el usuario proporciona una expresión matemática con 15 caracteres, el inicio de la cadena es `0` y el fin de la cadena es `15-1=14`.
+
+En la primera iteración se verifica si el carácter `exp[fin] = exp[14] = '5'` es un operador, como no es así, no se almacena su posición.
+
+![Imagen 5. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img5.png)
+
+Al iterar, el programa se da cuenta de que en la posición 11 existe un operador, como es el primer operador, se almacena y se sigue iterando.
+
+![Imagen 6. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img6.png)
+
+Al seguir iterando, el programa se da cuenta de que en la posición 7 existe un operador, como existe un operador anterior, se debe verificar que el operador actual es menor al operador almacenado previamente, si es así, se almacena la posición del operador actual.
+
+![Imagen 7. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img7.png)
+
+Al seguir iterando, el programa se da cuenta de que en la posición 3 existe un operador, como existe un operador anterior, se debe verificar que el operador actual es menor al operador almacenado previamente, en este caso, no es así, por lo tanto, no se almacena la posición del operador actual.
+
+![Imagen 8. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img8.png)
+
+Cuando el valor de fin sea menor al valor de ini, las iteraciones terminan, regresando la posición del operador con menor prioridad.
+
+![Imagen 9. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img9.png)
+
+Hasta el momento, solo nos ha interesado los operadores, pero, ¿Qué sucede si en la expresión matemática se encuentran paréntesis?
+
+#### Ejemplo 2
+
+Se encuentra el primer operador con menor prioridad
+
+![Imagen 10. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img10.png)
+
+Cuando se encuentra el primer parentesis de cierre, se deja de buscar operadores con menor prioridad hasta que se encuentre el parentesis abierto.
+
+:::tip[¿Porque se hace esto?]
+Recuenda que el parentesis es un operador con mayor prioridad, pero, dentro de los parentesis puede tener operadores con menor prioridad, SOLO SE REALIZA LA BUSQUEDA DE OPERADORES CON MENOR PRIORIDAD FUERA DE LOS PARENTESIS.
+
+Los operadores con menor prioridad dentro de los parentesis se obtendran en otro momento.
+
+Por el momento, pensaremos que todo lo que esta dentro de los parentesis es un numero.
+:::
+
+Cuando el paréntesis abierto es encontrado, seguimos buscando el operador con menor prioridad. En este ejemplo, se verifica que el operador que está en la posición 2 es menor al operador almacenado previamente, como no es así, no se almacena su posición.
+
+![Imagen 11. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img11.png)
+
+Al finalizar las iteraciones se retorna la posición del operador con menor prioridad.
+
+![Imagen 12. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img12.png)
+
+¿Qué sucede si en la expresión matemática solo son números?
+
+#### Ejemplo 3
+
+Se realiza la búsqueda del operador con menor prioridad, pero, al finalizar las iteraciones, no se encuentra ningún operador matemático, por lo tanto se regresa el valor de -1.
+
+![Imagen 13. Ejemplo Obtener posicion del operador con menor prioridad](/ps/proyectos/calculadora/img13.png)
+
+```c
+int obtenerOperadorMenorPrioridad( char exp[] , int ini , int fin ){
+    int operadorMenorPrioridad = -1;
+    int parentesis = 0;
+    while( ini <= fin ){
+        if( exp[fin] == ')' ){
+            parentesis++;
+        } else if( exp[fin] == '(' ){
+            parentesis--;
+        }if( esOperador( exp[fin] ) && parentesis == 0 ){
+            if( operadorMenorPrioridad == -1 ){
+                operadorMenorPrioridad = fin;
+            }else if( obtenerPrioridadOperador( exp[fin] ) <= obtenerPrioridadOperador( exp[operadorMenorPrioridad] ) ){
+                operadorMenorPrioridad = fin;
+            }
+        }
+        fin--;
+    }
+    return operadorMenorPrioridad;
+}
+```
+
+## Código Fuente
+
 ```c 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-int es_operador( char c ){
+int esOperador( char c ){
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
-int prioridadOperador( char c ){
+int obtenerPrioridadOperador( char c ){
     if( c == '*' ){
         return 4;
     }else if( c == '/' ){
@@ -33,10 +225,10 @@ int obtenerOperadorMenorPrioridad( char exp[] , int ini , int fin ){
             parentesis++;
         } else if( exp[fin] == '(' ){
             parentesis--;
-        }if( es_operador( exp[fin] ) && parentesis == 0 ){
+        }if( esOperador( exp[fin] ) && parentesis == 0 ){
             if( operadorMenorPrioridad == -1 ){
                 operadorMenorPrioridad = fin;
-            }else if( prioridadOperador( exp[fin] ) <= prioridadOperador( exp[operadorMenorPrioridad] ) ){
+            }else if( obtenerPrioridadOperador( exp[fin] ) <= obtenerPrioridadOperador( exp[operadorMenorPrioridad] ) ){
                 operadorMenorPrioridad = fin;
             }
         }
@@ -157,5 +349,4 @@ int main() {
     obtenerResultado( exp , strlen( exp ) );
     return 0;
 }
-
 ``` 
