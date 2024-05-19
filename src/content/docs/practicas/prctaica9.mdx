@@ -1,0 +1,144 @@
+---
+title : Práctica 9. Arreglos bidimensionales y parámetros por valor o por referencia
+---
+
+## Problema 1. MCD
+
+### Descripción 
+
+Dados dos valores enteros gerados de manera aleatoria, en un rango [1..1000]. Emplee el método de Euclides para construir un programa que encuentre el máximo común divisor de esos dos números. El método consta de los siguientes pasos:
+
+1. Divida el número mayor entre el número menor y conserve el residuo.
+1. Divida el número menor entre el residuo, y conserve nuevamente el residuo.
+1. Siga dividiendo el residuo anterior entre el nuevo residuo hasta que el residuo se haga cero; el último residuo que no sea cero es el máximo común divisor.
+
+### Ejemplo
+| Entrada | Salida |
+|------|:-------|
+<br/>     | El maximo comun divisor de 730 y 396 es 2
+<br/>     | El maximo comun divisor de 893 y 528 es 1
+
+:::note[Nota]
+La salida puede variar, ya que se utilizan números aleatorio
+:::
+
+### Código Fuente
+
+```c 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int obtenerNumeroAleatorio(){
+    return rand() % 1000 + 1;
+}
+
+int obtenerMCD( int numero1 , int numero2 ){
+    int numeroMayor;
+    int numeroMenor;
+    int residuo;
+
+    if( numero1 > numero2 ){
+        numeroMayor = numero1;
+        numeroMenor = numero2;
+    }else {
+        numeroMayor = numero2;
+        numeroMenor = numero1;
+    }
+
+    while( residuo = numeroMayor % numeroMenor ){
+        numeroMayor = numeroMenor;
+        numeroMenor = residuo;
+    }
+    return numeroMenor;
+}
+
+int main() {
+    srand(time(NULL));
+
+    int numero1 = obtenerNumeroAleatorio();
+    int numero2 = obtenerNumeroAleatorio();
+
+    int mcd = obtenerMCD( numero1 , numero2 );
+
+    printf( "El maximo comun divisor de %d y %d es %d" , numero1 , numero2 , mcd );
+
+    return 0;
+}
+```
+
+## Problema 2. Matriz Cuadrada
+
+### Descripción 
+
+Escribe un programa en C que genere los valores enteros de una matriz cuadrada de tamaño máximo 50 elementos; donde el usuario determina el tamaño de la matriz que quiere emplear. Los valores deben generarse aleatoriamente en un rango de [1..50]. El programa deberá obtener una nueva matriz a partir de calcular el cuadrado de los números que NO se encuentran en la diagonal de la matriz incial. Resolver el problema empleando funciones.
+
+### Ejemplo
+| Entrada | Salida |
+|------|:-------|
+3  <br/><br/><br/><br/><br/><br/><br/><br/>  | Ingrese el tamano de la matriz: <br/> Matriz Inicial: <br/> 20     1     9 <br/> 15    20    26 <br/> 42    33    24 <br/> Matriz con elementos al cuadrado: <br/> 20     1    81 <br/> 225    20   676 <br/> 1764  1089    24 <br/> 
+
+:::note[Nota]
+La salida puede variar, ya que se utilizan números aleatorio
+:::
+
+### Código Fuente
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+void imprimirMatriz( char mensaje[] , int * matriz , int tam ){
+    printf( "%s\n" , mensaje );
+    for( int j = 0 ; j < tam ; j++ ){
+        for( int i = 0 ; i < tam ; i++ ){
+            printf( "%5d " , *( matriz + tam * j + i ) );
+        }printf("\n");
+    }
+}
+
+int * obtenerMatrizConNumerosAleatrios( int tam ){
+    int * matriz = (int*) malloc( sizeof(int) * tam * tam );
+    for( int i = 0 ; i < tam*tam ; i++ ){
+        matriz[i] = rand() % 50 + 1;
+    }
+    return matriz;
+}
+
+void clacularCuadrados( int * matriz , int tam ){
+    for( int j = 0 ; j < tam ; j++ ){
+        for( int i = 0 ; i < tam ; i++ ){
+            if( i != j ){
+                matriz[ tam * j + i ] *= matriz[ tam * j + i ];
+            }
+        }
+    }
+}
+
+int main() {
+    srand(time(NULL));
+
+    printf( "Ingrese el tamano de la matriz: \n" );
+    int tam;
+    scanf( "%d" , &tam );
+
+    if( tam > 50 ){
+        printf( "El Tamano maximo es 50\n" );
+        return 0;
+    }
+
+    int * matriz = obtenerMatrizConNumerosAleatrios( tam );
+
+    char msg1[] = "Matriz Inicial:";
+    imprimirMatriz( msg1 , matriz , tam );
+
+    clacularCuadrados( matriz , tam );
+
+    char msg2[] = "Matriz con elementos al cuadrado:";
+    imprimirMatriz( msg2 , matriz , tam );
+
+    return 0;
+} 
+```
