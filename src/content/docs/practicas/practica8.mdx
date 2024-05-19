@@ -1,0 +1,46 @@
+---
+title : Practica 8. Cadenas
+---
+
+## Problema 1. Anagramas
+
+### Descripción 
+
+El programa debe usar una función que reciba la cadena original y su tamaño; esta función deberá desordenar la cadena n veces; donde n es el tamaño de la cadena que ingresó el usuario. Esta misma función se encargará de imprimir la cadena resultante de cada iteración.
+
+### Código 
+
+```c
+#include <stdio.h>
+#include<string.h>
+#include <stdlib.h>
+#include <time.h>
+
+void obtenerAnagramas(){
+    srand(time(NULL));
+
+    printf("Introdusca la cadena de caracteres\n");
+    char cadena[1000];
+    fgets( cadena , 1000 , stdin );
+    int tam = strlen( cadena ) - 1;
+
+    for( int i = 0 ; i < tam ; i++ ){
+        char copia[1000];
+        strcpy( copia , cadena );
+        for( int j = 0 ; j < 10 ; j++ ){
+            int pos1 = rand() % tam;
+            int pos2 = rand() % tam;
+            char caracter = copia[pos1];
+            copia[pos1] = copia[pos2];
+            copia[pos2] = caracter;
+        }
+        printf( "%s" , copia );
+    }
+
+}
+
+int main() {
+    obtenerAnagramas();
+    return 0;
+}
+```
