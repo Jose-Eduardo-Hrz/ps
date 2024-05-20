@@ -1,0 +1,219 @@
+---
+title : Proyecto Final. Calculadora V2
+---
+
+## Obtener Número de Caracteres
+
+```c
+int obtenerNumeroCaracteres( char * ini , char * fin ){
+    return fin - ini + 1;
+}
+```
+
+## Obtener Número Maximo de Caracteres
+
+```c 
+int obtenerNumeroMaximoCaracteres( char * iniNum1 , char * finNum1 , char * iniNum2 , char * finNum2 ){
+    int numeroMaximo;
+    int numeroCaracteresCadena1 = obtenerNumeroCaracteres( iniNum1 , finNum1 );
+    int numeroCaracteresCadena2 = obtenerNumeroCaracteres( iniNum2 , finNum2 );
+    if( numeroCaracteresCadena1 > numeroCaracteresCadena2 ){
+        numeroMaximo = numeroCaracteresCadena1;
+    }else {
+        numeroMaximo = numeroCaracteresCadena2;
+    }
+    return numeroMaximo;
+}
+```
+
+## Voltear Cadena de Caracteres
+
+```c 
+char * voltear( int tam , char cadena[] ){
+    char * nuevaCadena = malloc( sizeof(char) * tam + 1 );
+    for( int i = 0 ; i < tam ; i++ ){
+        nuevaCadena[i] = cadena[tam-1-i];
+    }
+    return nuevaCadena;
+}
+```
+
+## Suma con Dos Cadenas 
+
+```c 
+char * suma( char * iniNum1 , char * finNum1 , char * iniNum2 , char * finNum2 ){
+    int tamResultado = obtenerNumeroMaximoCaracteres(iniNum1 , finNum1 , iniNum2 , finNum2);
+    char * resultado = (char*) malloc( sizeof(char) * tamResultado + 2 );
+    char acarreo = '0';
+    int posicion = 0;
+    while( finNum1 >= iniNum1 || finNum2 >= iniNum2 ){
+        int subResultado;
+        if( finNum1 >= iniNum1 && finNum2 >= iniNum2 ){
+            subResultado = (acarreo - '0') + ( *finNum1 - '0' ) + ( *finNum2 - '0' );
+            finNum1--;
+            finNum2--;
+        } else if( iniNum1 > finNum1 && finNum2 >= iniNum2 ){
+            subResultado = (acarreo - '0') + ( *finNum2 - '0' );
+            finNum2--;
+        } else if( finNum1 >= iniNum1 && iniNum2 > finNum2 ){
+            subResultado = (acarreo - '0') + ( *finNum1 - '0' );
+            finNum1--;
+        }
+        char registro[3];
+        snprintf( registro , sizeof(registro) , "%d" , subResultado );
+        if( strlen( registro ) > 1 ){
+            resultado[posicion] = registro[1];
+            acarreo = registro[0];
+        }else {
+            resultado[posicion] = registro[0];
+            acarreo = '0';
+        }
+        posicion++;
+    }
+
+    if( acarreo != '0' ){
+        resultado[posicion] = acarreo;
+        char * resultadoFinal = voltear( posicion + 1 , resultado );
+        free( resultado );
+        return resultadoFinal;
+    }
+    char * resultadoFinal = voltear( posicion , resultado );
+    free( resultado );
+    return resultadoFinal;
+}
+```
+
+## Resta con Dos Cadenas de Caracteres
+
+```c
+char * resta( char * iniNum1 , char * finNum1 , char * iniNum2 , char * finNum2  ) {
+    int tamResultado = obtenerNumeroMaximoCaracteres(iniNum1 , finNum1 , iniNum2 , finNum2);
+    char * resultado = (char*) malloc( sizeof(char) * tamResultado + 2 );
+    char acarreo = '0';
+    int posicion = 0;
+    while( finNum1 >= iniNum1 || finNum2 >= iniNum2 ){
+        int subResultado;
+        int minuendo;
+        int sustraendo;
+        if( finNum1 >= iniNum1 && finNum2 >= iniNum2 ){
+            minuendo = ( *finNum1 - '0' );
+            sustraendo = ( *finNum2 - '0' + acarreo - '0' );
+            finNum1--;
+            finNum2--;
+        } else if( finNum1 >= iniNum1 && iniNum2 > finNum2 ){
+            minuendo = ( *finNum1 - '0' );
+            sustraendo = acarreo - '0';
+            finNum1--;
+        } else if( iniNum1 > finNum1 && finNum2 >= iniNum2 ){
+            minuendo = 0;
+            sustraendo = ( *finNum2 - '0' + acarreo - '0' );
+            finNum2--;
+        }
+        if( minuendo < sustraendo ){
+            minuendo = 10 + minuendo;
+            acarreo = '1';
+        } else {
+            acarreo = '0';
+        }
+        subResultado = minuendo - sustraendo;
+        sprintf( &resultado[posicion] , "%d" , subResultado );
+
+        posicion++;
+    }
+    if( acarreo == '1' ){
+        acarreo = '0';
+        for( int i = 0 ; i < tamResultado ; i++ ){
+            int subresultado;
+            int minuendo = 0;
+            int sustraendo = ( resultado[i] - '0' + acarreo - '0' );
+            if( minuendo < sustraendo ){
+                minuendo = 10 + minuendo;
+                acarreo = '1';
+            } else {
+                acarreo = '0';
+            }
+            resultado[i] = (minuendo - sustraendo) + '0';
+        }
+        resultado[tamResultado] = '-';
+        char * resultadoFinal = voltear( tamResultado+1 , resultado );
+        free( resultado );
+        return resultadoFinal;
+    }
+    char * resultadoFinal = voltear( tamResultado , resultado );
+    free( resultado );
+    return resultadoFinal;
+} 
+```
+
+## Multiplicación con Dos Cadenas
+
+```c 
+char * multiplicacion( char * iniNum1 , char * finNum1 , char * iniNum2 , char * finNum2 ){
+    int tamMultiplicando = obtenerNumeroCaracteres( iniNum1 , finNum1 );
+    int tamMultiplicador = obtenerNumeroCaracteres( iniNum2 , finNum2 );
+    int tamResultado = tamMultiplicando + tamMultiplicador;
+    char producto[ tamMultiplicador ][ tamMultiplicando + 2 ];
+    char * resultado = (char*) malloc( sizeof(char) * tamResultado + 1 );
+    for( int i = 0 ; i < tamResultado ; i++ ){
+        resultado[i] = '0';
+    }
+    int renglon = 0;
+    while( iniNum2 <= finNum2 ){
+        int columna = 0;
+        char acarreo = '0';
+        while( iniNum1 <= (finNum1 - columna) ){
+            int multiplicando = *(finNum1 - columna) - '0';
+            int multiplicador = *finNum2 - '0';
+            int subResultado = (multiplicando * multiplicador) + (acarreo - '0');
+            char registro[3];
+            snprintf( registro , sizeof(registro) , "%d" , subResultado );
+            if( strlen( registro ) > 1 ){
+                producto[renglon][columna] = registro[1];
+                acarreo = registro[0];
+            }else {
+                producto[renglon][columna] = registro[0];
+                acarreo = '0';
+            }
+            columna++;
+        }
+        if( acarreo != '0' ){
+            producto[renglon][columna] = acarreo;
+            producto[renglon][columna+1] = '\0';
+        }else {
+            producto[renglon][columna] = '\0';
+        }
+        finNum2--;
+        renglon++;
+    }
+
+    int desplazamiento = 0;
+    renglon = 0;
+    while( renglon < tamMultiplicador ) {
+        char acarreo = '0';
+        int columna = 0;
+        while( columna < strlen( producto[renglon] ) ) {
+            int subResultado = producto[renglon][columna] - '0' + resultado[ columna + desplazamiento ] - '0' + acarreo - '0';
+            char registro[3];
+            snprintf( registro , sizeof(registro) , "%d" , subResultado );
+            if( strlen( registro ) > 1 ){
+                resultado[ columna + desplazamiento ] = registro[1];
+                acarreo = registro[0];
+            } else {
+                resultado[ columna + desplazamiento ] = registro[0];
+                acarreo = '0';
+            }
+            columna++;
+        }
+        if( acarreo != '0' ){
+            resultado[ columna + desplazamiento ] = acarreo;
+        }
+        renglon++;
+        desplazamiento++;
+    }
+
+    char * resultadoFinal = voltear( tamResultado , resultado );
+    free( resultado );
+    return resultadoFinal;
+}
+```
+
